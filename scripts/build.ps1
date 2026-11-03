@@ -17,12 +17,15 @@ if (-not (Test-Path $QtConfig)) {
     throw "Qt 6 was not found at $QtConfig. Install mingw-w64-ucrt-x86_64-qt6-base in MSYS2 UCRT64."
 }
 
-cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release "-DCMAKE_PREFIX_PATH=$QtPrefix"
+cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release "-DCMAKE_PREFIX_PATH=$QtPrefix" -DBUILD_TESTING=ON
 if ($LASTEXITCODE -ne 0) { throw 'CMake configure failed.' }
 
 cmake --build build --parallel
 if ($LASTEXITCODE -ne 0) { throw 'Build failed.' }
 
+ctest --test-dir build --output-on-failure
+if ($LASTEXITCODE -ne 0) { throw 'One or more tests failed.' }
+
 Write-Host ''
-Write-Host 'Build successful.' -ForegroundColor Green
+Write-Host 'Build and tests successful.' -ForegroundColor Green
 Write-Host 'Run the application with: .\build\ExpenseTracker.exe'

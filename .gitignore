@@ -1,5 +1,6 @@
 # CMake / build output
 build/
+build*/
 cmake-build-*/
 CMakeFiles/
 CMakeCache.txt
@@ -8,8 +9,14 @@ compile_commands.json
 
 # Local financial records (never commit personal data)
 data/*.json
+data/backups/
 !data/.gitkeep
 
 # IDE files
 .vs/
 .idea/
+
+# User-generated exports and backups
+*.csv
+*.pftbackup
+*.backup.json

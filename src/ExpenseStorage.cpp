@@ -9,6 +9,7 @@
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QJsonParseError>
+#include <QSet>
 
 // Constructor
 ExpenseStorage::ExpenseStorage(const QString& filePath)
@@ -67,11 +68,16 @@ bool ExpenseStorage::load(
         return false;
     }
 
-    QJsonArray array =
-        document.object().value("expenses").toArray();
+    const QJsonValue recordsValue = document.object().value("expenses");
+    if (!recordsValue.isArray()) {
+        setError("Expense JSON must contain an 'expenses' array.");
+        return false;
+    }
+    const QJsonArray array = recordsValue.toArray();
 
     // Read and validate each expense
     QList<Expense> loadedExpenses;
+    QSet<QString> ids;
 
     for (int i = 0; i < array.size(); ++i) {
 
@@ -101,6 +107,11 @@ bool ExpenseStorage::load(
             return false;
         }
 
+        if (ids.contains(expense.getId())) {
+            setError(QString("Duplicate expense ID at record %1.").arg(i + 1));
+            return false;
+        }
+        ids.insert(expense.getId());
         loadedExpenses.append(expense);
     }
 
@@ -129,6 +140,7 @@ bool ExpenseStorage::save(
     }
 
     QJsonArray array;
+    QSet<QString> ids;
 
     for (const Expense& expense : expenses) {
 
@@ -139,6 +151,11 @@ bool ExpenseStorage::save(
             return false;
         }
 
+        if (ids.contains(expense.getId())) {
+            setError("Duplicate expense ID: " + expense.getId());
+            return false;
+        }
+        ids.insert(expense.getId());
         array.append(expense.toJson());
     }
 

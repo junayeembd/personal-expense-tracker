@@ -14,9 +14,9 @@ Expense::Expense(
 )
     : id(id),
       date(date),
-      category(category),
+      category(category.trimmed()),
       amount(amount),
-      note(note)
+      note(note.trimmed())
 {
 }
 

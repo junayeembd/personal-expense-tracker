@@ -8,6 +8,7 @@
 #include <QJsonObject>
 #include <QJsonParseError>
 #include <QSaveFile>
+#include <QSet>
 
 IncomeStorage::IncomeStorage(const QString& filePath)
     : m_filePath(filePath)
@@ -48,6 +49,7 @@ bool IncomeStorage::load(QList<Income>& incomes, QString* errorMessage) const
         return fail("Income JSON must contain an 'incomes' array.");
 
     QList<Income> loaded;
+    QSet<QString> ids;
     const QJsonArray records = recordsValue.toArray();
     for (qsizetype i = 0; i < records.size(); ++i) {
         if (!records.at(i).isObject())
@@ -57,6 +59,9 @@ bool IncomeStorage::load(QList<Income>& incomes, QString* errorMessage) const
         QString validationError;
         if (!Income::fromJson(records.at(i).toObject(), income, &validationError))
             return fail(QString("Income record %1: %2").arg(i + 1).arg(validationError));
+        if (ids.contains(income.getId()))
+            return fail(QString("Duplicate income ID at record %1.").arg(i + 1));
+        ids.insert(income.getId());
         loaded.append(income);
     }
 
@@ -77,10 +82,14 @@ bool IncomeStorage::save(const QList<Income>& incomes, QString* errorMessage) co
         return fail("Could not create income data directory.");
 
     QJsonArray records;
+    QSet<QString> ids;
     for (const Income& income : incomes) {
         QString validationError;
         if (!income.isValid(&validationError))
             return fail(validationError);
+        if (ids.contains(income.getId()))
+            return fail("Duplicate income ID: " + income.getId());
+        ids.insert(income.getId());
         records.append(income.toJson());
     }
 

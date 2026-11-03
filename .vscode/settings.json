@@ -2,6 +2,10 @@
     "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
     "C_Cpp.default.compileCommands": "${workspaceFolder}/build/compile_commands.json",
     "cmake.generator": "Ninja",
+    "cmake.configureSettings": {
+        "CMAKE_PREFIX_PATH": "C:/msys64/ucrt64",
+        "BUILD_TESTING": "ON"
+    },
     "cmake.configureOnOpen": true,
     "files.associations": {
         "*.h": "cpp"

@@ -3,21 +3,19 @@
 # Personal Finance Tracker
 
 <p>
-  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=20&pause=1100&color=2563EB&center=true&vCenter=true&width=760&lines=Track+your+money%2C+not+your+memory.;Understand+your+income+and+expenses.;Built+with+C%2B%2B17+%E2%80%A2+Qt+6+%E2%80%A2+JSON" alt="Animated project tagline" />
+  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=20&pause=1100&color=2563EB&center=true&vCenter=true&width=820&lines=Track+your+money%2C+not+your+memory.;Plan+your+spending+with+monthly+budgets.;Understand+your+financial+trends.;Built+with+C%2B%2B17+and+Qt+6." alt="Animated project tagline" />
 </p>
 
-**A clean, offline-first desktop app for tracking income, expenses, and your financial trends.**
-
-<br />
+**A polished, offline-first Windows desktop application for managing income, expenses, budgets, and financial trends.**
 
 ![C++17](https://img.shields.io/badge/C%2B%2B-17-00599C?logo=cplusplus&logoColor=white)
 ![Qt 6](https://img.shields.io/badge/Qt-6-41CD52?logo=qt&logoColor=white)
 ![CMake](https://img.shields.io/badge/CMake-Build-064F8C?logo=cmake&logoColor=white)
-![Platform](https://img.shields.io/badge/Platform-Windows%2011-0078D6?logo=windows&logoColor=white)
+![Windows](https://img.shields.io/badge/Platform-Windows%2011-0078D6?logo=windows&logoColor=white)
 ![Storage](https://img.shields.io/badge/Storage-Local%20JSON-orange?logo=json&logoColor=white)
 ![License](https://img.shields.io/badge/License-MIT-green.svg)
 
-[Features](#-features) · [Screenshots](#-screenshots) · [Install](#-installation) · [Build](#-build-and-run) · [Data & Privacy](#-data-and-privacy) · [Contributing](#-contributing)
+[Overview](#-overview) · [Features](#-features) · [Interface](#-interface-previews) · [Install](#-installation) · [Build](#-build-and-run) · [Testing](#-testing) · [Privacy](#-data-and-privacy) · [User guide](docs/USER_GUIDE.md)
 
 </div>
 
@@ -25,101 +23,139 @@
 
 ## ✨ Overview
 
-**Personal Finance Tracker** is a Windows desktop application built with **C++17** and **Qt 6 Widgets**. It brings income and expense records together in one place, calculates your balance, and visualizes recent financial activity.
+**Personal Finance Tracker** is a native Windows desktop application built with **C++17** and **Qt 6 Widgets**. It brings income, expenses, monthly category budgets, and financial analytics into one clean workspace.
 
-The app is designed to work locally. Your records are stored as JSON files on your computer—no account, cloud service, server, or database is required.
+The application works offline and stores your records locally as JSON files. No account, cloud service, remote database, or subscription is required.
 
-> **Current release:** `v2.1.0`  
-> **Currency shown in the interface:** BDT (৳)
+> **Release:** `v3.0.0`
+> **Display currency:** BDT (৳)
+> **Target platform:** Windows 11 with the MSYS2 UCRT64 toolchain
 
 ## 🚀 Features
 
 ### 📊 Financial dashboard
 
-- View **total income**, **total expenses**, **current balance**, and **this month's expenses**.
-- Compare income and expenses across the **last six months** with a bar chart.
-- See a **current-month expense breakdown by category** with a donut chart.
-- Refresh dashboard figures automatically when transaction records change.
+- All-time **total income**, **total expenses**, and **current balance**.
+- **This month's expenses** and aggregate monthly budget health.
+- Six-month income-versus-expense bar chart.
+- Current-month expense category donut chart.
+- Budget usage progress with visual warning states.
+- Dashboard figures and charts refresh after data changes.
+- Subtle fade transitions between navigation pages and polished hover/focus states.
 
-### 💳 Transaction management
+### 💳 Income and expense management
 
-- Add, edit, and delete both **income** and **expense** records.
-- Record an amount, date, category/source, and optional description.
-- Use built-in categories or type a **custom category**.
-- Browse income and expenses together in one transaction list.
+- Add, edit, and delete income and expense transactions.
+- Store amount, date, category/source, and an optional description.
+- Built-in categories plus editable custom category entry.
+- Combined transaction history with clear income/expense indicators.
 - Search by category or description.
-- Filter by transaction type, category, and an inclusive date range.
-- Confirm before permanently deleting a record.
-- Export transactions to **CSV**, encoded as UTF-8 with a BOM for improved compatibility with spreadsheet applications.
+- Filter by transaction type, category, and inclusive date range.
+- Sort by newest, oldest, highest amount, or lowest amount.
+- Clear all filters with one action.
+- Double-click a transaction to edit it.
+- Confirmation before permanent deletion.
 
-### 💾 Local JSON storage
+### 🎯 Monthly category budgets
 
-- Expense records: `data/expenses.json`
-- Income records: `data/incomes.json`
-- Save operations use Qt's `QSaveFile` for safer, atomic file replacement.
-- Existing Version 1 expense records remain compatible. If an older record has no ID, the app generates one when it is loaded.
-- Personal JSON data is excluded from version control through `.gitignore`.
-- If the project's `data` directory cannot be created, the app falls back to the operating system's application-data location.
+- Create a spending limit for a category and calendar month.
+- Edit or remove a budget without changing transaction records.
+- Compare the budget limit with actual expenses in that category and month.
+- Review spent amount, remaining amount, and percentage used.
+- Status indicators: **On track**, **Near limit** (80% or more), and **Over budget**.
+- Prevent duplicate budgets for the same category and month.
+- Dashboard-wide monthly budget progress summary.
 
-### 🔒 Privacy-first by design
+### 🔁 Recurring transactions
 
-- Your financial records stay on your device unless you deliberately export or share them.
-- No sign-up, telemetry service, cloud sync, or online account is needed by the application.
-- CSV exports may contain private information: store and share them carefully.
+- Create recurring income or expense rules for weekly, monthly, or yearly schedules.
+- Choose category/source, amount, first due date, and optional description.
+- Pause, resume, edit, or delete a rule at any time.
+- Process due rules automatically when the application starts or manually from the Recurring page.
+- Deterministic transaction IDs prevent duplicate generated records if processing is retried after an interrupted save.
+- Each rule keeps its next due date, so future occurrences are not generated early.
+- Monthly schedules preserve the selected day (or month-end anchor), including shorter months such as February.
 
-## 🖼️ Screenshots
+### 📤 Export and recovery
 
-Add screenshots of your own app build to `docs/screenshots/` and use the image links below. Use sample transactions rather than real personal financial records before publishing screenshots publicly.
+- Export income and expense transactions to CSV.
+- CSV uses UTF-8 with a BOM for improved spreadsheet compatibility.
+- Text fields are quoted and spreadsheet formula-like values are neutralized.
+- Create a complete JSON backup containing expenses, income, budgets, and recurring rules.
+- Restore from a valid application backup after confirmation.
+- Automatically create a pre-restore safety backup before replacing existing data.
+- JSON writes use Qt `QSaveFile` to reduce the risk of partially written files.
 
-<!--
-Create docs/screenshots/ and add these files when ready:
+### 💾 Local data and compatibility
+
+- Expenses: `data/expenses.json`
+- Income: `data/incomes.json`
+- Budgets: `data/budgets.json`
+- Recurring rules: `data/recurring.json`
+- Existing Version 1 expense records remain readable; records without IDs receive generated IDs.
+- Duplicate transaction IDs and duplicate category/month budgets are rejected.
+- Malformed JSON is reported and is not silently overwritten.
+- If the project data directory cannot be created, the app falls back to the operating system's application-data location.
+
+## 🖼️ Interface previews
+
+The illustrations below are **sample-data previews**. Replace them with fresh screenshots from your own build before publishing a public portfolio page. Never publish real personal financial records.
 
 <p align="center">
-  <img src="docs/screenshots/dashboard.png" alt="Personal Finance Tracker dashboard" width="900" />
+  <img src="docs/screenshots/dashboard-preview.svg" alt="Illustrative Personal Finance Tracker dashboard preview" width="920" />
 </p>
+
 <p align="center">
-  <img src="docs/screenshots/transactions.png" alt="Transactions page" width="900" />
+  <img src="docs/screenshots/transactions-preview.svg" alt="Illustrative transactions and filters preview" width="920" />
 </p>
--->
+
+<p align="center">
+  <img src="docs/screenshots/budgets-preview.svg" alt="Illustrative monthly budgets preview" width="920" />
+</p>
+
+<p align="center">
+  <img src="docs/screenshots/recurring-preview.svg" alt="Illustrative recurring transactions preview" width="920" />
+</p>
 
 ## 🧰 Technology stack
 
 | Technology | Purpose |
 |---|---|
 | C++17 | Application logic and data models |
-| Qt 6 Widgets | Windows desktop interface |
-| Qt JSON classes | Read and write local JSON records |
-| Qt `QPainter` | Draw dashboard charts |
-| Qt `QSaveFile` | Safer atomic JSON writes |
-| CMake | Configure the multi-file C++ project |
-| Ninja | Fast build generation |
+| Qt 6 Widgets | Native desktop interface and dialogs |
+| Qt JSON classes | Local data serialization |
+| Qt `QPainter` | Dashboard charts without an additional chart library |
+| Qt `QSaveFile` | Safer atomic JSON and CSV writes |
+| CMake | Multi-file project configuration |
+| Ninja | Build generation |
 | MSYS2 UCRT64 / MinGW-w64 | Windows compiler and toolchain |
+| CTest | Automated model and storage checks |
 
-**Chart dependency note:** charts are painted with `QPainter`; the optional Qt Charts module is not required.
+**Chart dependency:** charts are drawn with `QPainter`; the optional Qt Charts module is not required.
 
 ## 🖥️ Installation
 
-These instructions are for **Windows 11** using the **MSYS2 UCRT64** toolchain.
+These instructions target **Windows 11** using **MSYS2 UCRT64**.
 
 ### 1. Install MSYS2
 
 1. Download MSYS2 from the [official website](https://www.msys2.org/).
-2. Install it to the default location: `C:\msys64`.
-3. Open **MSYS2 UCRT64** from the Start menu. Make sure you open UCRT64, not the plain MSYS terminal.
+2. Install it to `C:\msys64` (the default location).
+3. Open **MSYS2 UCRT64** from the Start menu. Do not use the plain MSYS terminal for this toolchain.
 
-### 2. Update MSYS2
+### 2. Update the package database
 
-In the **MSYS2 UCRT64** terminal, run:
+In MSYS2 UCRT64, run:
 
 ```bash
 pacman -Syu
 ```
 
-If MSYS2 asks you to close the terminal, close it, open **MSYS2 UCRT64** again, and complete any remaining update steps.
+If MSYS2 asks you to close the terminal, close it, reopen **MSYS2 UCRT64**, and run the update command again if requested.
 
-### 3. Install the compiler and Qt build tools
+### 3. Install compiler, Qt, CMake, and Ninja
 
-Run this command in **MSYS2 UCRT64**:
+Run in **MSYS2 UCRT64**:
 
 ```bash
 pacman -S --needed \
@@ -129,9 +165,9 @@ pacman -S --needed \
   mingw-w64-ucrt-x86_64-qt6-base
 ```
 
-When prompted, accept the default package selection and confirm the installation.
+Accept the default package selection and confirm the installation.
 
-### 4. Add UCRT64 tools to Windows PATH
+### 4. Add UCRT64 to Windows PATH
 
 Add this directory to your **Windows user Path**:
 
@@ -139,11 +175,11 @@ Add this directory to your **Windows user Path**:
 C:\msys64\ucrt64\bin
 ```
 
-To edit it: Windows Search → **Edit environment variables for your account** → select **Path** under User variables → **Edit** → **New** → paste the path → confirm with **OK**.
+Windows Search → **Edit environment variables for your account** → **Path** under User variables → **Edit** → **New** → paste the path → **OK**.
 
 Close and reopen VS Code after changing PATH.
 
-### 5. Verify the installation
+### 5. Verify the tools
 
 Open a new VS Code PowerShell terminal and run:
 
@@ -155,7 +191,7 @@ ninja --version
 qmake6 --version
 ```
 
-Each command should print its version. If a command is not recognized, confirm the packages are installed in UCRT64 and that the PATH entry is correct.
+Each command should display a version.
 
 ### 6. Install VS Code extensions
 
@@ -164,22 +200,22 @@ Install these extensions from the VS Code Marketplace:
 - **C/C++** — Microsoft
 - **CMake Tools** — Microsoft
 
-Open the project root folder (the folder containing `CMakeLists.txt`) in VS Code. Do not use **Run Code** from Code Runner on an individual `.cpp` file; this is a multi-file Qt/CMake application and must be built as a project.
+Open the folder that contains `CMakeLists.txt` as the VS Code workspace. Do not use Code Runner's **Run Code** command on an individual `.cpp` file; this is a multi-file Qt/CMake project.
 
 ## ▶️ Build and run
 
-### Option A: Use the included PowerShell scripts (recommended)
+### Recommended: PowerShell helper scripts
 
-Open VS Code's **PowerShell** terminal at the project root and run:
+Open VS Code's PowerShell terminal at the project root and run:
 
 ```powershell
 .\scripts\build.ps1
 .\scripts\run.ps1
 ```
 
-The build script configures a Release build and compiles the application. The run script starts `build/ExpenseTracker.exe`; if the executable is missing, it invokes the build script first.
+The build helper configures a Release build, compiles the app and test target, and runs the automated tests. The run helper starts `build/ExpenseTracker.exe` and builds first if the executable is missing.
 
-If PowerShell blocks local scripts because of the current execution policy, allow scripts only for the current terminal session, then retry:
+If PowerShell blocks local scripts, allow them for the current terminal session only:
 
 ```powershell
 Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
@@ -187,62 +223,83 @@ Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
 .\scripts\run.ps1
 ```
 
-### Option B: Build manually with CMake
+### Manual CMake build
 
-Make sure the terminal is in the **project root** (not inside `src/` or `include/`). Then run:
+Make sure the terminal is at the **project root** (the folder containing `CMakeLists.txt`), not inside `src` or `include`.
 
 ```powershell
 cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=C:/msys64/ucrt64
 cmake --build build --parallel
+ctest --test-dir build --output-on-failure
 .\build\ExpenseTracker.exe
 ```
 
-For a Debug build, replace `Release` with `Debug`:
-
-```powershell
-cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug -DCMAKE_PREFIX_PATH=C:/msys64/ucrt64
-cmake --build build --parallel
-.\build\ExpenseTracker.exe
-```
+For a Debug build, replace `Release` with `Debug`.
 
 ### Build output
-
-After a successful build, the executable is created here:
 
 ```text
 build/ExpenseTracker.exe
 ```
 
+## 🧪 Testing
+
+The project includes a lightweight automated model/storage test executable, run through CTest. It checks:
+
+- Budget validation and JSON round-trip.
+- Budget storage read/write and duplicate category/month rejection.
+- Legacy expense loading and automatic ID generation.
+- Expense storage read/write.
+- Income validation and storage read/write.
+- Recurring-rule validation, schedule fields, JSON round-trip, and storage read/write.
+
+Run tests with:
+
+```powershell
+ctest --test-dir build --output-on-failure
+```
+
+The GUI also needs manual testing. See [`tests/MANUAL_TEST_PLAN.md`](tests/MANUAL_TEST_PLAN.md) for the complete checklist.
+
 ## 🗂️ Project structure
 
 ```text
 Personal-Expense-Tracker/
-├── .vscode/
-│   └── settings.json
-├── data/
-│   └── .gitkeep
+├── .vscode/settings.json
+├── data/.gitkeep
 ├── docs/
 │   ├── ARCHITECTURE.md
 │   ├── MIGRATING_FROM_V2.md
-│   └── TROUBLESHOOTING.md
+│   ├── TROUBLESHOOTING.md
+│   ├── USER_GUIDE.md
+│   └── screenshots/
 ├── include/
+│   ├── Budget.h
+│   ├── BudgetStorage.h
 │   ├── Expense.h
 │   ├── ExpenseStorage.h
 │   ├── Income.h
 │   ├── IncomeStorage.h
+│   ├── RecurringRule.h
+│   ├── RecurringStorage.h
 │   └── MainWindow.h
 ├── scripts/
 │   ├── build.ps1
 │   └── run.ps1
 ├── src/
+│   ├── Budget.cpp
+│   ├── BudgetStorage.cpp
 │   ├── Expense.cpp
 │   ├── ExpenseStorage.cpp
 │   ├── Income.cpp
 │   ├── IncomeStorage.cpp
+│   ├── RecurringRule.cpp
+│   ├── RecurringStorage.cpp
 │   ├── MainWindow.cpp
 │   └── main.cpp
 ├── tests/
-│   └── MANUAL_TEST_PLAN.md
+│   ├── MANUAL_TEST_PLAN.md
+│   └── model_storage_tests.cpp
 ├── .gitattributes
 ├── .gitignore
 ├── CHANGELOG.md
@@ -251,71 +308,47 @@ Personal-Expense-Tracker/
 └── README.md
 ```
 
-## 🧪 Test the application
+## 🔒 Data and privacy
 
-Use disposable test records while testing. Back up your real JSON files before copying, editing, or migrating data.
-
-Recommended checks:
-
-1. Launch with no JSON files and confirm the dashboard opens with zero totals.
-2. Add an expense and an income; confirm both appear in Transactions.
-3. Confirm balance = total income − total expenses.
-4. Edit a record and verify the changes remain after restarting the app.
-5. Delete a record; test both **Yes** and **No** in the confirmation dialog.
-6. Search by category and description.
-7. Filter by type, category, and date range.
-8. Export CSV and open it in a spreadsheet application.
-9. Copy a Version 1 `expenses.json` file and confirm the legacy records load.
-10. Add a custom category and confirm it can be saved and filtered.
-
-See [`tests/MANUAL_TEST_PLAN.md`](tests/MANUAL_TEST_PLAN.md) for the full test checklist.
-
-## 🛠️ Troubleshooting
-
-| Problem | What to check |
-|---|---|
-| `cmake` or `ninja` is not recognized | Recheck installation and `C:\msys64\ucrt64\bin` in Windows user PATH; reopen VS Code. |
-| `Qt6Config.cmake` cannot be found | Install `mingw-w64-ucrt-x86_64-qt6-base` in MSYS2 UCRT64 and configure with `-DCMAKE_PREFIX_PATH=C:/msys64/ucrt64`. |
-| `QApplication` or Qt headers are missing | Do not use Code Runner on one `.cpp` file; configure and build the complete CMake project. |
-| CMake says a source file is missing | Run `Get-Location` and confirm the terminal is at the directory containing `CMakeLists.txt`. |
-| PowerShell says scripts are disabled | Use `Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass` for the current terminal session. |
-| Old expenses are missing | Close the app and copy the old `data/expenses.json` into the new project's `data` directory; keep a backup first. |
-
-For more help, see [`docs/TROUBLESHOOTING.md`](docs/TROUBLESHOOTING.md) and [`docs/MIGRATING_FROM_V2.md`](docs/MIGRATING_FROM_V2.md).
+- All records are stored locally on the device.
+- No sign-up, telemetry, cloud sync, server, or database is used by the application.
+- JSON records and backup files may contain sensitive financial information.
+- Keep `data/*.json`, `data/backups/`, and CSV exports private.
+- The `.gitignore` excludes local JSON records, backups, and generated build files.
+- Use sample data in public screenshots and demonstrations.
+- Back up your data before replacing project files or migrating to a new version.
 
 ## 🧱 Architecture
 
-The application keeps its main responsibilities separate:
+The application separates data models, persistence, and the Qt Widgets interface:
 
 ```text
-MainWindow (Qt Widgets interface)
+MainWindow (Qt Widgets UI)
    ├── Expense model ── ExpenseStorage ── data/expenses.json
    ├── Income model  ── IncomeStorage  ── data/incomes.json
-   └── Dashboard charts (QPainter)
+   ├── Budget model  ── BudgetStorage  ── data/budgets.json
+   ├── Dashboard charts (QPainter)
+   └── Backup / restore (versioned JSON bundle)
 ```
 
-See [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) for more detail.
+See [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) for additional detail.
 
 ## 🗺️ Roadmap
 
-- [x] Expense tracking and JSON persistence
-- [x] Income tracking and separate JSON persistence
-- [x] Financial summary dashboard
-- [x] Six-month income/expense chart
-- [x] Category breakdown chart
-- [x] Search, filters, and CSV export
-- [ ] Automated unit and integration tests
-- [ ] Optional data backup and restore interface
-- [ ] Optional installer/package for easier Windows distribution
+- [x] Income and expense CRUD
+- [x] Local JSON persistence and legacy expense migration
+- [x] Financial dashboard and charts
+- [x] Search, filters, sorting, and CSV export
+- [x] Monthly category budgets and overspending indicators
+- [x] Full data backup and validated restore
+- [x] Automated model/storage tests
+- [ ] Scheduled / recurring transactions
+- [ ] Optional dark theme and user preferences
+- [ ] Optional Windows installer and portable release package
 
 ## 🤝 Contributing
 
-Suggestions and bug reports are welcome. Before sharing a change:
-
-1. Build the project with the instructions above.
-2. Run the manual checks in `tests/MANUAL_TEST_PLAN.md`.
-3. Keep personal JSON data, CSV exports, and build output out of commits.
-4. Update the README or changelog when user-visible behavior changes.
+Suggestions and bug reports are welcome. Before sharing a change, build the application, run CTest, and complete the relevant manual checks. Do not include personal transaction files, backup files, CSV exports, or build output in shared source packages.
 
 ## 📄 License
 
@@ -325,7 +358,7 @@ This project is distributed under the **MIT License**. See [`LICENSE`](LICENSE).
 
 <div align="center">
 
-**Built with C++17 and Qt 6.**  
-Made for clear, private, offline-first personal finance tracking.
+**Built with C++17 and Qt 6.**
+Track your money with clarity.
 
 </div>

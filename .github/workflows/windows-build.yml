@@ -1,4 +1,4 @@
-name: Windows UCRT64 Build
+name: Windows UCRT64 Build and Tests
 
 on:
   push:
@@ -11,13 +11,13 @@ permissions:
   contents: read
 
 jobs:
-  build:
+  build-and-test:
     runs-on: windows-latest
     defaults:
       run:
         shell: msys2 {0}
     steps:
-      - name: Check out repository
+      - name: Check out source
         uses: actions/checkout@v4
 
       - name: Set up MSYS2 UCRT64 and dependencies
@@ -32,7 +32,10 @@ jobs:
             mingw-w64-ucrt-x86_64-qt6-base
 
       - name: Configure
-        run: cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=/ucrt64
+        run: cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=/ucrt64 -DBUILD_TESTING=ON
 
       - name: Build
         run: cmake --build build --parallel
+
+      - name: Run tests
+        run: ctest --test-dir build --output-on-failure

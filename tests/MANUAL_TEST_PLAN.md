@@ -1,23 +1,54 @@
-# Manual Test Plan — Personal Expense Tracker 2.1
+# Manual GUI Test Plan — Version 3.0
 
-Use disposable test records. Back up your real `data/*.json` files before testing.
+Use clearly fictional test records. Do not use private transactions when capturing public screenshots.
 
-| ID | Test | Steps | Expected result |
-|---|---|---|---|
-| T01 | First launch | Start with no JSON files | Dashboard opens; totals are zero; files are created after first save. |
-| T02 | Add expense | Add Food, BDT 260, today's date | Expense appears in Transactions and expense JSON. |
-| T03 | Add income | Add Salary, BDT 20,000, today's date | Income appears and is saved in income JSON. |
-| T04 | Balance | Add the T02 and T03 records | Balance equals income minus expense. |
-| T05 | Edit expense | Select an expense, edit amount/category/date/note | Edited record persists after restart. |
-| T06 | Edit income | Select an income, edit its details | Edited income persists after restart. |
-| T07 | Delete | Select a record, choose Delete, confirm | Only the selected record is removed after confirmation. |
-| T08 | Cancel delete | Select a record and cancel the confirmation | No data changes. |
-| T09 | Search | Search by a category or a word in description | Only matching records appear. |
-| T10 | Type filter | Select Income, then Expense | Table shows only selected type. |
-| T11 | Category filter | Select a category | Table shows records in that category. |
-| T12 | Date filter | Enable range and select a date interval | Only records in the inclusive range appear. |
-| T13 | CSV export | Export records to a new CSV file and open in Excel | Header and all income/expense rows are readable. |
-| T14 | Persistence | Close and reopen the app | All saved records and dashboard totals are restored. |
-| T15 | Legacy expense JSON | Keep a Version 1 `expenses.json` and launch | Existing expense entries are loaded; no income records are required. |
-| T16 | Empty/invalid amount | Submit blank, zero, or invalid amount | Dialog prevents saving and explains the validation error. |
-| T17 | Custom category | Type a custom category in Add dialog | Custom category can be saved and filtered. |
+## Startup and persistence
+
+1. Launch with no JSON files; confirm the dashboard opens with zero totals and no crash.
+2. Add one expense and one income; close and reopen; confirm both records remain.
+3. Confirm older Version 1/2 expense records still load (records without IDs receive IDs).
+4. Inspect each JSON file and confirm the expected `expenses`, `incomes`, `budgets`, or `rules` top-level array is present.
+
+## Transactions
+
+5. Add, edit, and delete an expense.
+6. Add, edit, and delete an income.
+7. Test invalid amount, empty category, and cancel actions.
+8. Search by category and description.
+9. Filter by type, category, and date range.
+10. Try a start date later than the end date; confirm the invalid range message is displayed.
+11. Sort newest, oldest, highest amount, and lowest amount.
+12. Double-click a row and confirm the edit dialog opens.
+13. Export CSV, open it in a spreadsheet, and inspect non-ASCII text and formula-like descriptions.
+
+## Budgets
+
+14. Create a Food budget for the current month.
+15. Add Food expenses; verify spent, remaining, and usage update.
+16. Verify 80% or greater shows Near limit and more than 100% shows Over budget.
+17. Try to create a duplicate category/month budget; it should be rejected.
+18. Edit and delete a budget; existing transactions must remain unchanged.
+19. Change the month filter; only that month's budgets should appear.
+
+## Recurring transactions
+
+20. Create a weekly expense rule with a due date in the past; confirm one transaction is created for each due date through today.
+21. Create a monthly income rule with a future due date; confirm it is not generated early.
+22. Press **Process due now** twice and restart the app; confirm the same scheduled occurrence is not duplicated.
+23. Pause a rule and confirm it is skipped; resume and process due records.
+24. Verify a monthly rule anchored to the 30th returns to the 30th after February; verify a month-end rule remains on each month's last day.
+25. Edit a recurring rule and confirm changes persist after restart.
+26. Delete a rule and confirm already-generated transactions remain in the transaction history.
+
+## Backup and restore
+
+27. Create a backup and verify it contains `expenses`, `incomes`, `budgets`, and `recurringRules` arrays.
+28. Make a test change, restore the backup, and verify all four data groups return.
+29. Confirm a pre-restore safety copy is created under `data/backups/`.
+30. Try to restore invalid JSON; the app must reject it without changing data.
+31. Restore a schema version 1 backup without recurring rules; the app should accept it and restore an empty recurring-rule list.
+
+## Privacy and release
+
+32. Confirm `data/*.json`, `data/backups/`, `build/`, and CSV exports are not included in source packages.
+33. Capture only fictional sample data for public screenshots.
