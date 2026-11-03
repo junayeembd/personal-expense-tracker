@@ -1,0 +1,15 @@
+# CMake / build output
+build/
+cmake-build-*/
+CMakeFiles/
+CMakeCache.txt
+compile_commands.json
+.ninja_*
+
+# Local financial records (never commit personal data)
+data/*.json
+!data/.gitkeep
+
+# IDE files
+.vs/
+.idea/
